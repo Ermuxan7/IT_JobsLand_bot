@@ -20,5 +20,5 @@ async def find_worker(
         f"📞 Baylanisiw: {contact}"
     )
 
-    result = await send_telegram_message(message)
-    return {"status": "success", "response": result.json()}
+    result = send_telegram_message(message)
+    return {"response": result}
