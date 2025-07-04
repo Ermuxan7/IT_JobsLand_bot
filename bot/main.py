@@ -1,20 +1,21 @@
 import asyncio
-from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message
-from config import BOT_TOKEN
-from handlers import start
+from aiogram import Bot, Dispatcher
+from bot.config import BOT_TOKEN
+from bot.handlers import start, callbacks
+from web.db import database
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 dp.include_router(start.router)
-
-@dp.message(F.text == "/get_chat_id")
-async def get_chat_id(msg: Message):
-    await msg.answer(f"Chat ID: `{msg.chat.id}`", parse_mode="Markdown")
+dp.include_router(callbacks.router)
 
 async def main():
-    await dp.start_polling(bot)
+    await database.connect()
+    try:
+        await dp.start_polling(bot)
+    finally:
+        await database.disconnect()
 
 if __name__ == "__main__":
     asyncio.run(main())

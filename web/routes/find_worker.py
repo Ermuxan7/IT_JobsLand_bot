@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Form
-from web.utils.telegram import send_telegram_message
+from web.utils.telegram import send_to_admin
 
 router = APIRouter()
 
@@ -20,5 +20,5 @@ async def find_worker(
         f"📞 Baylanisiw: {contact}"
     )
 
-    result = send_telegram_message(message)
-    return {"response": result}
+    result = await send_to_admin(message)
+    return {"status": "send_to_admin", "res": result}
