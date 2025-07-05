@@ -30,7 +30,7 @@ async def find_worker(
 
     form_data = {
         "user_id": user_id,
-        "job_title": position,
+        "position": position,
         "company": company,
         "address": address,
         "requirements": requirements,
@@ -41,5 +41,5 @@ async def find_worker(
         "status": "pending"
     }
 
-    result = await send_to_admin(message, form_data)
+    result = await send_to_admin(message, form_data, "vacancy")
     return {"res": result}

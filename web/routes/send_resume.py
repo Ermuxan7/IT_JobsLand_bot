@@ -5,6 +5,7 @@ router = APIRouter()
 
 @router.post("/send-resume/")
 async def send_resume(
+    user_id: int = Form(...),
     full_name: str = Form(...),
     profession: str = Form(...),
     age: int = Form(...),
@@ -20,11 +21,30 @@ async def send_resume(
         f"📄 *Rezyume!*\n"
         f"👤 Ati: {full_name}\n"
         f"🎂 Jasi: {age}\n"
+        f"💼 Lawazim: {profession}\n"
+        f"📍 Manzil: {address}\n"
         f"📋 Skills: {skills}\n"
         f"📈 Tajiriybe: {experience}\n"
+        f"💰 Ayliq: {salary}\n"
+        f"🎯 Maqset: {goal}\n"
         f"📞 Baylanisiw: {contacts}"
         f"🌐 Portfolio: {portfolio or 'Korsetilmegen'}"
     )
 
-    result = await send_to_admin(message)
+    form_data = {
+        "user_id": user_id,
+        "full_name": full_name,
+        "age": age,
+        "profession": profession,
+        "address": address,
+        "skills": skills,
+        "experience": experience,
+        "salary": salary,
+        "goal": goal,
+        "contacts": contacts,
+        "portfolio": portfolio,
+        "status": "pending"
+    }
+
+    result = await send_to_admin(message, form_data, "resume")
     return {"response": result}

@@ -5,20 +5,31 @@ router = APIRouter()
 
 @router.post("/order-project/")
 async def order_project(
-    client_name: str = Form(...),
-    project_type: str = Form(...),
-    description: str = Form(...),
+    user_id: int = Form(...),
+    specialist: str = Form(...),
+    task: str = Form(...),
+    additional: str = Form(...),
     budget: str = Form(...),
-    contact: str = Form(...),
+    contacts: str = Form(...),
 ):
     message = (
         f"🛠 *Proyekt buyirtpa!*\n"
-        f"👤 Buyirtpashi: {client_name}\n"
-        f"📌 Proyekt-turi: {project_type}\n"
-        f"📝 Proekt haqqinda: {description}\n"
+        f"👤 Buyirtpashi: {specialist}\n"
+        f"📌 Proyekt-turi: {task}\n"
+        f"📝 Proekt haqqinda: {additional}\n"
         f"💰 Budjet: {budget}\n"
-        f"📞 Baylanisiw: {contact}"
+        f"📞 Baylanisiw: {contacts}"
     )
 
-    result = await send_to_admin(message)
+    form_data = {
+        "user_id": user_id,
+        "specialist": specialist,
+        "task": task,
+        "additional": additional,
+        "budget": budget,
+        "contacts": contacts,
+        "status": "pending"
+    }
+
+    result = await send_to_admin(message, form_data, "project")
     return {"response": result}
