@@ -17,7 +17,20 @@ async def approve_callback(callback_query: types.CallbackQuery):
         return
     
     print("Vacancy found:", vacancy)
-    await send_telegram_message(vacancy['message'])
+
+    message = (
+        f"   📢 *Vakansiya!*\n"
+        f"🏢 Kompaniya: {vacancy['company']}\n"
+        f"💼 Lawazim: {vacancy['job_title']}\n"
+        f"📍 Manzil: {vacancy['address']}\n"
+        f"⏱ Jumis waqti: {vacancy['working_time']}\n"
+        f"📋 Talaplar: {vacancy['requirements']}\n"
+        f"💰 Ayliq: {vacancy['salary']}\n"
+        f"📞 Baylanisiw: {vacancy['contacts']}\n"
+        f"📝 Qosimsha: {vacancy['additional']}\n"
+    )
+
+    await send_telegram_message(message)
     await database.execute(
         vacancies.update()
         .where(vacancies.c.id == message_id)
@@ -32,28 +45,27 @@ async def reject_callback(callback_query: types.CallbackQuery):
     try:
         message_id = uuid.UUID(callback_query.data.split("::", 1)[1])
 
-        # Ma'lumotni DB dan olib kelamiz
+        # Magliwmatti DB dan alip kelemiz
         query = vacancies.select().where(vacancies.c.id == message_id)
         vacancy = await database.fetch_one(query)
 
         print("Reject callback vacancy:", vacancy)
         if not vacancy:
-            await callback_query.answer("❌ Vakansiya tabilmadi", show_alert=True)
+            await callback_query.answer("❌ Vakansiya tabilmadi")
             return
 
-        # Statusni o‘zgartiramiz
+        # Statusdi o‘zgertemiz
         await database.execute(
             vacancies.update()
             .where(vacancies.c.id == message_id)
             .values(status="rejected")
         ) 
 
-
-        await callback_query.message.edit_text("❌ Vakansiya rad etildi.")
+        await callback_query.message.edit_text("❌ Vakansiya biykar qilindi.")
 
         # Adminga alert
-        await callback_query.answer("❌ Biykar etildi", show_alert=True)
+        await callback_query.answer("❌ Biykar etildi")
 
     except Exception as e:
         print(f"Reject callback xatosi: {e}")
-        await callback_query.answer("❌ Xatolik yuz berdi", show_alert=True)
+        await callback_query.answer("❌ Qatelik boldi", show_alert=True)

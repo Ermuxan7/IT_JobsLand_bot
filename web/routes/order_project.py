@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Form
-from web.utils.telegram import send_telegram_message
+from web.utils.telegram import send_to_admin
 
 router = APIRouter()
 
@@ -20,5 +20,5 @@ async def order_project(
         f"📞 Baylanisiw: {contact}"
     )
 
-    result = send_telegram_message(message)
+    result = await send_to_admin(message)
     return {"response": result}

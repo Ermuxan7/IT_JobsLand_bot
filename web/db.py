@@ -1,21 +1,63 @@
 from databases import Database
-import sqlalchemy, os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-DATABASE_URL = os.getenv("DATABASE_URL")
+import uuid, sqlalchemy
+from sqlalchemy import Table, Column, Text, String, Integer, Float, TIMESTAMP, MetaData
+from sqlalchemy.dialects.postgresql import UUID
+from bot.config import DATABASE_URL
 
 database = Database(DATABASE_URL)
-metadata = sqlalchemy.MetaData()
+metadata = MetaData()
 
-vacancies = sqlalchemy.Table(
+vacancies = Table(
     "vacancies",
     metadata,
-    sqlalchemy.Column("id", sqlalchemy.dialects.postgresql.UUID, primary_key=True),
-    sqlalchemy.Column("message", sqlalchemy.Text, nullable=False),
-    sqlalchemy.Column("status", sqlalchemy.String, default="pending"),
-    sqlalchemy.Column("created_at", sqlalchemy.TIMESTAMP, server_default=sqlalchemy.func.now()),
+    Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    Column("user_id", Integer, nullable=False),
+    Column("job_title", String, nullable=False),          
+    Column("company", String, nullable=False),          
+    Column("address", String, nullable=False),          
+    Column("requirements", Text, nullable=False),          
+    Column("working_time", String, nullable=False),          
+    Column("salary", String, nullable=False),          
+    Column("contacts", String, nullable=False),          
+    Column("additional", Text, nullable=False),               
+    Column("status", String, default="pending"),
+    Column("created_at", TIMESTAMP, server_default=sqlalchemy.func.now()),
+    Column("updated_at", TIMESTAMP, server_default=sqlalchemy.func.now(), onupdate=sqlalchemy.func.now()),
+)
+
+resumes = Table(
+    "resumes",
+    metadata,
+    Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    Column("user_id", Integer, nullable=False),
+    Column("full_name", String, nullable=False),
+    Column("profession", String, nullable=False),
+    Column("age", Integer, nullable=False),
+    Column("address", String, nullable=False),
+    Column("skills", Text, nullable=False),
+    Column("experience", String, nullable=False),
+    Column("portfolio", Text, nullable=False),
+    Column("salary", Text, nullable=False),
+    Column("goal", Text, nullable=False),
+    Column("contacts", String, nullable=False),
+    Column("status", String, default="pending"),
+    Column("created_at", TIMESTAMP, server_default=sqlalchemy.func.now()),
+    Column("updated_at", TIMESTAMP, server_default=sqlalchemy.func.now(), onupdate=sqlalchemy.func.now()),
+)
+
+projects = Table(
+    "projects",
+    metadata,
+    Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+    Column("user_id", Integer, nullable=False),
+    Column("specialist", String, nullable=False),
+    Column("task", String, nullable=False),
+    Column("budget", Float, nullable=False),
+    Column("contacts", String, nullable=False),
+    Column("additional", Text, nullable=False),
+    Column("status", String, default="pending"),
+    Column("created_at", TIMESTAMP, server_default=sqlalchemy.func.now()),
+    Column("updated_at", TIMESTAMP, server_default=sqlalchemy.func.now(), onupdate=sqlalchemy.func.now()),
 )
 
 engine = sqlalchemy.create_engine(DATABASE_URL)
