@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Form
 from web.utils.telegram import send_to_admin
+from web.utils.verify_init_data import verify_init_data
 
 router = APIRouter()
 
 @router.post("/send-resume/")
 async def send_resume(
-    user_id: int = Form(...),
     full_name: str = Form(...),
     profession: str = Form(...),
     age: int = Form(...),
@@ -16,7 +16,14 @@ async def send_resume(
     goal: str = Form(...),
     contacts: str = Form(...),
     portfolio: str = Form(None),
+    init_data: str = Form(...)
 ):
+    user_data = verify_init_data(init_data)
+    if not user_data:
+        return {"error": "Invalid init_data"}
+
+    user_id = int(user_data["user_id"])
+
     message = (
         f"📄 *Rezyume!*\n"
         f"👤 Ati: {full_name}\n"

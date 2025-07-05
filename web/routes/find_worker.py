@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Form
 from web.utils.telegram import send_to_admin
+from web.utils.verify_init_data import verify_init_data
 
 router = APIRouter()
 
 @router.post("/find-worker/")
 async def find_worker(
-    user_id: int = Form(...),
     company: str = Form(...),
     position: str = Form(...),
     address: str = Form(...),
@@ -14,7 +14,15 @@ async def find_worker(
     additional: str = Form(...),
     salary: str = Form(...),
     contacts: str = Form(...),
+    init_data: str = Form(...),
 ):
+
+    user_data = verify_init_data(init_data)
+    if not user_data:
+        return {"error": "Invalid init_data"}
+
+    user_id = int(user_data["user_id"])
+
     message = (
         f"   📢 *Vakansiya!*\n"
         f"🏢 Kompaniya: {company}\n"
