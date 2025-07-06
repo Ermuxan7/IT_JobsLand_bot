@@ -5,9 +5,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins = [
+    "https://online-jobs-bot-ui.vercel.app",  
+    "http://localhost:3000",        
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://online-jobs-bot-ui.vercel.app/"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,3 +31,4 @@ async def shutdown():
 app.include_router(find_worker.router)
 app.include_router(send_resume.router)
 app.include_router(order_project.router)
+
