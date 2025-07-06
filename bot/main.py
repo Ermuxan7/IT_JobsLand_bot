@@ -17,5 +17,5 @@ async def main():
     finally:
         await database.disconnect()
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# if __name__ == "__main__":
+#     asyncio.run(main())
