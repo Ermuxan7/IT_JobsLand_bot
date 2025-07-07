@@ -12,7 +12,7 @@ async def start_bot():
         print(f"❌ Polling failed: {e}")
 
 async def start_api():
-    port = int(os.environ.get("PORT", 8000))
+    port = int(os.environ.get("PORT", 8080))
     config = uvicorn.Config(app=fastapi_app, host="0.0.0.0", port=port)
     server = uvicorn.Server(config)
     await server.serve()
