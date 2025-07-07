@@ -1,3 +1,5 @@
+# start.py
+
 import asyncio
 import os
 import uvicorn
@@ -5,11 +7,8 @@ from web.main import app as fastapi_app
 from bot.main import bot, dp
 
 async def start_bot():
-    try:
-        print("✅ Starting polling...")
-        await dp.start_polling(bot)
-    except Exception as e:
-        print(f"❌ Polling failed: {e}")
+    print("✅ Starting polling...")
+    await dp.start_polling(bot)
 
 async def start_api():
     port = int(os.environ.get("PORT", 8080))
@@ -17,11 +16,9 @@ async def start_api():
     server = uvicorn.Server(config)
     await server.serve()
 
-async def main():
+# 💡 BU MUHIM! Railway 'start:app' ni mana shu funksiya sifatida kutmoqda:
+async def app():
     await asyncio.gather(
-        start_bot(),
-        start_api()
+        start_api(),
+        start_bot()
     )
-
-if __name__ == "__main__":
-    asyncio.run(main())
