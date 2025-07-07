@@ -5,7 +5,7 @@ from web.schemas.sendResume import SendResume
 
 router = APIRouter()
 
-@router.post("/send-resume/")
+@router.post("/")
 async def send_resume(
     payload: SendResume
 ):

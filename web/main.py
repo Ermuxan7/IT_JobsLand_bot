@@ -1,9 +1,19 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from web.routes import find_worker, send_resume, order_project
 from web.db import database 
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(request: Request):
+    print("Start..")
+    await database.connect()
+    yield
+    await database.disconnect()
+    print("End..")
+
+
+app = FastAPI(lifespan=lifespan)
 
 origins = [
     "https://online-jobs-bot-ui.vercel.app",  
@@ -18,17 +28,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def startup():
-    await database.connect()
-    print("Database connected")
-
-@app.on_event("shutdown")
-async def shutdown():
-    await database.disconnect()
-    print("Database disconnected")
-
-app.include_router(find_worker.router)
-app.include_router(send_resume.router)
-app.include_router(order_project.router)
+app.include_router(find_worker.router, prefix="/find_worker", tags=['Find Worker ushin Api'])
+app.include_router(send_resume.router, prefix="/send_resume", tags=['Api for send resume'])
+app.include_router(order_project.router, prefix="/order_project", tags=['Api for oreder project'])
 

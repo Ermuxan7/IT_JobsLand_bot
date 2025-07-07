@@ -5,7 +5,7 @@ from web.schemas.findWorker import FindWorkerForm
 
 router = APIRouter()
 
-@router.post("/find-worker/")
+@router.post("/")
 async def find_worker(
     payload: FindWorkerForm,
 ):

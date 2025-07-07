@@ -5,7 +5,7 @@ from web.schemas.orderProject import OrderProject
 
 router = APIRouter()
 
-@router.post("/order-project/")
+@router.post("/")
 async def order_project(
     payload: OrderProject
 ):  
