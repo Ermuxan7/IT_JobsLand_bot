@@ -24,3 +24,6 @@ async def app():
         start_api(),
         start_bot()
     )
+
+if __name__ == "__main__":
+    asyncio.run(main())
