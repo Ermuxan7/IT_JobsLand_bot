@@ -1,25 +1,16 @@
 from fastapi import APIRouter, Form, HTTPException
 from web.utils.telegram import send_to_admin
 from web.utils.verify_init_data import verify_init_data
+from web.schemas.sendResume import SendResume
 
 router = APIRouter()
 
 @router.post("/send-resume/")
 async def send_resume(
-    full_name: str = Form(...),
-    profession: str = Form(...),
-    age: int = Form(...),
-    address: str = Form(...),
-    skills: str = Form(...),
-    experience: str = Form(...),
-    salary: str = Form(...),
-    goal: str = Form(...),
-    contacts: str = Form(...),
-    portfolio: str = Form(None),
-    init_data: str = Form(...)
+    payload: SendResume
 ):
     try:
-        user_data = verify_init_data(init_data)
+        user_data = verify_init_data(payload.init_data)
         if not user_data:
             return {"res": "error", "reason": "invalid init_data"}
 
@@ -27,30 +18,30 @@ async def send_resume(
 
         message = (
             f"📄 *Rezyume!*\n"
-            f"👤 Ati: {full_name}\n"
-            f"🎂 Jasi: {age}\n"
-            f"💼 Lawazim: {profession}\n"
-            f"📍 Manzil: {address}\n"
-            f"📋 Skills: {skills}\n"
-            f"📈 Tajiriybe: {experience}\n"
-            f"💰 Ayliq: {salary}\n"
-            f"🎯 Maqset: {goal}\n"
-            f"📞 Baylanisiw: {contacts}\n"
-            f"🌐 Portfolio: {portfolio or 'Korsetilmegen'}"
+            f"👤 Ati: {payload.full_name}\n"
+            f"🎂 Jasi: {payload.age}\n"
+            f"💼 Lawazim: {payload.profession}\n"
+            f"📍 Manzil: {payload.address}\n"
+            f"📋 Skills: {payload.skills}\n"
+            f"📈 Tajiriybe: {payload.experience}\n"
+            f"💰 Ayliq: {payload.salary}\n"
+            f"🎯 Maqset: {payload.goal}\n"
+            f"📞 Baylanisiw: {payload.contacts}\n"
+            f"🌐 Portfolio: {payload.portfolio or 'Korsetilmegen'}"
         )
 
         form_data = {
             "user_id": user_id,
-            "full_name": full_name,
-            "age": age,
-            "profession": profession,
-            "address": address,
-            "skills": skills,
-            "experience": experience,
-            "salary": salary,
-            "goal": goal,
-            "contacts": contacts,
-            "portfolio": portfolio,
+            "full_name": payload.full_name,
+            "age": payload.age,
+            "profession": payload.profession,
+            "address": payload.address,
+            "skills": payload.skills,
+            "experience": payload.experience,
+            "salary": payload.salary,
+            "goal": payload.goal,
+            "contacts": payload.contacts,
+            "portfolio": payload.portfolio,
             "status": "pending"
         }
 

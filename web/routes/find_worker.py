@@ -1,23 +1,16 @@
 from fastapi import APIRouter, Form, HTTPException
 from web.utils.telegram import send_to_admin
 from web.utils.verify_init_data import verify_init_data
+from web.schemas.findWorker import FindWorkerForm
 
 router = APIRouter()
 
 @router.post("/find-worker/")
 async def find_worker(
-    company: str = Form(...),
-    position: str = Form(...),
-    address: str = Form(...),
-    requirements: str = Form(...),
-    working_time: str = Form(...),
-    additional: str = Form(...),
-    salary: str = Form(...),
-    contacts: str = Form(...),
-    init_data: str = Form(...)
+    payload: FindWorkerForm,
 ):
     try:
-        user_data = verify_init_data(init_data)
+        user_data = verify_init_data(payload.init_data)
         if not user_data:
             return {"res": "error", "reason": "invalid init_data"}
         
@@ -25,26 +18,26 @@ async def find_worker(
 
         message = (
             f"   📢 *Vakansiya!*\n"
-            f"🏢 Kompaniya: {company}\n"
-            f"💼 Lawazim: {position}\n"
-            f"📋 Talaplar: {requirements}\n"
-            f"📍 Manzil: {address}\n"
-            f"⏱ Jumis waqti: {working_time}\n"
-            f"💰 Ayliq: {salary}\n"
-            f"📞 Baylanisiw: {contacts}\n"
-            f"📝 Qosimsha: {additional}"
+            f"🏢 Kompaniya: {payload.company}\n"
+            f"💼 Lawazim: {payload.position}\n"
+            f"📋 Talaplar: {payload.requirements}\n"
+            f"📍 Manzil: {payload.address}\n"
+            f"⏱ Jumis waqti: {payload.working_time}\n"
+            f"💰 Ayliq: {payload.salary}\n"
+            f"📞 Baylanisiw: {payload.contacts}\n"
+            f"📝 Qosimsha: {payload.additional}"
         )
 
         form_data = {
             "user_id": user_id,
-            "position": position,
-            "company": company,
-            "address": address,
-            "requirements": requirements,
-            "working_time": working_time,
-            "salary": salary,
-            "contacts": contacts,
-            "additional": additional,
+            "position": payload.position,
+            "company": payload.company,
+            "address": payload.address,
+            "requirements": payload.requirements,
+            "working_time": payload.working_time,
+            "salary": payload.salary,
+            "contacts": payload.contacts,
+            "additional": payload.additional,
             "status": "pending"
         }
 
