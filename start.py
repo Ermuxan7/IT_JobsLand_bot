@@ -15,7 +15,7 @@ async def start_bot():
 
 async def start_api():
     port = int(os.environ.get("PORT", 8080))
-    config = uvicorn.Config(app=fastapi_app, host="102.0.0.1", port=port)
+    config = uvicorn.Config(app=fastapi_app, host="0.0.0.0", port=port)
     server = uvicorn.Server(config)
     await server.serve()
 
