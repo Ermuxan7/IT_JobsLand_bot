@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 from web.utils.telegram import send_to_admin
 from web.utils.verify_init_data import verify_init_data
 
@@ -14,40 +14,43 @@ async def find_worker(
     additional: str = Form(...),
     salary: str = Form(...),
     contacts: str = Form(...),
-    init_data: str = Form(...),
+    init_data: str = Form(...)
 ):
+    try:
+        user_data = verify_init_data(init_data)
+        if not user_data:
+            return {"res": "error", "reason": "invalid init_data"}
+        
+        user_id = int(user_data.get("user_id", 0))
 
-    user_data = verify_init_data(init_data)
-    if not user_data:
-        return {"error": "Invalid init_data"}
+        message = (
+            f"   📢 *Vakansiya!*\n"
+            f"🏢 Kompaniya: {company}\n"
+            f"💼 Lawazim: {position}\n"
+            f"📋 Talaplar: {requirements}\n"
+            f"📍 Manzil: {address}\n"
+            f"⏱ Jumis waqti: {working_time}\n"
+            f"💰 Ayliq: {salary}\n"
+            f"📞 Baylanisiw: {contacts}\n"
+            f"📝 Qosimsha: {additional}"
+        )
 
-    user_id = int(user_data["user_id"])
+        form_data = {
+            "user_id": user_id,
+            "position": position,
+            "company": company,
+            "address": address,
+            "requirements": requirements,
+            "working_time": working_time,
+            "salary": salary,
+            "contacts": contacts,
+            "additional": additional,
+            "status": "pending"
+        }
 
-    message = (
-        f"   📢 *Vakansiya!*\n"
-        f"🏢 Kompaniya: {company}\n"
-        f"💼 Lawazim: {position}\n"
-        f"📋 Talaplar: {requirements}\n"
-        f"📍 Manzil: {address}\n"
-        f"⏱ Jumis waqti: {working_time}\n"
-        f"📋 Talaplar: {requirements}\n"
-        f"💰 Ayliq: {salary}\n"
-        f"📞 Baylanisiw: {contacts}"
-        f"📝 Qosimsha: {additional}"
-    )
+        result = await send_to_admin(message, form_data, "vacancy")
+        return {"res": result}
 
-    form_data = {
-        "user_id": user_id,
-        "position": position,
-        "company": company,
-        "address": address,
-        "requirements": requirements,
-        "working_time": working_time,
-        "salary": salary,
-        "contacts": contacts,
-        "additional": additional,
-        "status": "pending"
-    }
-
-    result = await send_to_admin(message, form_data, "vacancy")
-    return {"res": result}
+    except Exception as e:
+        print("❌ Qatelik find_worker'da:", e)
+        raise HTTPException(status_code=500, detail="Ishki server qatesi")

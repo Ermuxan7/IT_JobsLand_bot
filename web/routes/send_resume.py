@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 from web.utils.telegram import send_to_admin
 from web.utils.verify_init_data import verify_init_data
 
@@ -18,40 +18,45 @@ async def send_resume(
     portfolio: str = Form(None),
     init_data: str = Form(...)
 ):
-    user_data = verify_init_data(init_data)
-    if not user_data:
-        return {"error": "Invalid init_data"}
+    try:
+        user_data = verify_init_data(init_data)
+        if not user_data:
+            return {"res": "error", "reason": "invalid init_data"}
 
-    user_id = int(user_data["user_id"])
+        user_id = int(user_data.get("user_id", 0))
 
-    message = (
-        f"📄 *Rezyume!*\n"
-        f"👤 Ati: {full_name}\n"
-        f"🎂 Jasi: {age}\n"
-        f"💼 Lawazim: {profession}\n"
-        f"📍 Manzil: {address}\n"
-        f"📋 Skills: {skills}\n"
-        f"📈 Tajiriybe: {experience}\n"
-        f"💰 Ayliq: {salary}\n"
-        f"🎯 Maqset: {goal}\n"
-        f"📞 Baylanisiw: {contacts}"
-        f"🌐 Portfolio: {portfolio or 'Korsetilmegen'}"
-    )
+        message = (
+            f"📄 *Rezyume!*\n"
+            f"👤 Ati: {full_name}\n"
+            f"🎂 Jasi: {age}\n"
+            f"💼 Lawazim: {profession}\n"
+            f"📍 Manzil: {address}\n"
+            f"📋 Skills: {skills}\n"
+            f"📈 Tajiriybe: {experience}\n"
+            f"💰 Ayliq: {salary}\n"
+            f"🎯 Maqset: {goal}\n"
+            f"📞 Baylanisiw: {contacts}\n"
+            f"🌐 Portfolio: {portfolio or 'Korsetilmegen'}"
+        )
 
-    form_data = {
-        "user_id": user_id,
-        "full_name": full_name,
-        "age": age,
-        "profession": profession,
-        "address": address,
-        "skills": skills,
-        "experience": experience,
-        "salary": salary,
-        "goal": goal,
-        "contacts": contacts,
-        "portfolio": portfolio,
-        "status": "pending"
-    }
+        form_data = {
+            "user_id": user_id,
+            "full_name": full_name,
+            "age": age,
+            "profession": profession,
+            "address": address,
+            "skills": skills,
+            "experience": experience,
+            "salary": salary,
+            "goal": goal,
+            "contacts": contacts,
+            "portfolio": portfolio,
+            "status": "pending"
+        }
 
-    result = await send_to_admin(message, form_data, "resume")
-    return {"response": result}
+        result = await send_to_admin(message, form_data, "resume")
+        return {"res": result}
+
+    except Exception as e:
+        print("❌ send_resume ERROR:", e)
+        raise HTTPException(status_code=500, detail="Server error")
