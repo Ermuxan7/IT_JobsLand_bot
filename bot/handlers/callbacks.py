@@ -17,21 +17,26 @@ table_map = {
 async def handle_callback(callback_query: types.CallbackQuery):
     try:
         action, form_type, msg_id = callback_query.data.split("_", 2)
+
         item_id = uuid.UUID(msg_id)
 
         table = table_map.get(form_type)
         # Magliwmat turin tekseremiz
         if table is None:
+            print("❌ Keste joq")
             await callback_query.answer("❌ Qatelik boldi")
             return
         
+
         # Magliwmatti DB dan alip kelemiz
         item = await database.fetch_one(select(table).where(table.c.id == item_id))
-        if not item:
+        if item is None:
+            print("❌ Bazada bu item topilmadi!")
             await callback_query.answer("❌ Magliwmat tabilmadi")
             return
 
         if action == 'approve':
+            print("✅ callbacks() item_id:", item_id)
             # Kanalga jiberiletugin magliwmat turleri
             if form_type == 'vacancy':
                 message = (

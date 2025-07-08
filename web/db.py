@@ -1,6 +1,6 @@
 from databases import Database
 import uuid, sqlalchemy
-from sqlalchemy import Table, Column, Text, String, Integer, TIMESTAMP, MetaData
+from sqlalchemy import Table, Column, Text, String, Integer, TIMESTAMP, MetaData, BigInteger
 from sqlalchemy.dialects.postgresql import UUID
 from bot.config import DATABASE_URL
 
@@ -11,7 +11,7 @@ vacancies = Table(
     "vacancies",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-    Column("user_id", Integer, nullable=False),
+    Column("user_id", BigInteger, nullable=False),
     Column("company", String, nullable=False),          
     Column("position", String, nullable=False),          
     Column("requirements", Text, nullable=False),          
@@ -29,7 +29,7 @@ resumes = Table(
     "resumes",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-    Column("user_id", Integer, nullable=False),
+    Column("user_id", BigInteger, nullable=False),
     Column("full_name", String, nullable=False),
     Column("profession", String, nullable=False),
     Column("age", Integer, nullable=False),
@@ -49,7 +49,7 @@ projects = Table(
     "projects",
     metadata,
     Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-    Column("user_id", Integer, nullable=False),
+    Column("user_id", BigInteger, nullable=False),
     Column("specialist", String, nullable=False),
     Column("task", String, nullable=False),
     Column("budget", String, nullable=False),

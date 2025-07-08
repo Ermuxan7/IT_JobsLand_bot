@@ -46,4 +46,4 @@ async def find_worker(
 
     except Exception as e:
         print("❌ Qatelik find_worker'da:", e)
-        raise HTTPException(status_code=500, detail="Ishki server qatesi")
+        raise HTTPException(status_code=500, detail=f"Ishki server qatesi")

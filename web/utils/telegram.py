@@ -3,9 +3,11 @@ from datetime import datetime
 from web.db import database, vacancies, resumes, projects
 from bot.config import BOT_TOKEN, CHANNEL_ID, ADMIN_ID
 
-
 async def send_to_admin(message: str, form_data: dict, form_type: str):
     item_id = uuid.uuid4()
+
+    print("✅ send_to_admin() item_id:", item_id)
+
 
     if not database.is_connected:
         await database.connect()
