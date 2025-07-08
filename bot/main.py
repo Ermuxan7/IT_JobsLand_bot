@@ -1,4 +1,3 @@
-
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from bot.config import BOT_TOKEN
