@@ -8,7 +8,7 @@ from web.db import database
 from contextlib import asynccontextmanager
 
 @asynccontextmanager
-async def lifespan(request: Request):
+async def lifespan(app: FastAPI):
     print("Start..")
     await database.connect()
     yield
