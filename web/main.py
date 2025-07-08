@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(find_worker.router, prefix="/find_worker", tags=['Find Worker ushin Api'])
-app.include_router(send_resume.router, prefix="/send_resume", tags=['Api for send resume'])
-app.include_router(order_project.router, prefix="/order_project", tags=['Api for order project'])
+app.include_router(find_worker.router, prefix="/find-worker", tags=['Find Worker ushin Api'])
+app.include_router(send_resume.router, prefix="/send-resume", tags=['Api for send resume'])
+app.include_router(order_project.router, prefix="/order-project", tags=['Api for order project'])
 
