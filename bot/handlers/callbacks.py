@@ -61,6 +61,7 @@ async def handle_callback(callback_query: types.CallbackQuery):
                     f"📈 Tajiriybe: {item['experience']}\n"
                     f"💰 Ayliq: {item['salary']}\n"
                     f"🎯 Maqseti: {item['goal']}\n"
+                    f"🌐 Portfolio: {item['portfolio']}"
                     f"📞 Baylanisiw: {item['contacts']}\n"
                 )
             elif form_type == 'project':
