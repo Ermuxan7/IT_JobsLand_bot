@@ -4,41 +4,48 @@ import urllib.parse
 from bot.config import BOT_TOKEN
 
 def verify_init_data(init_data: str) -> dict | None:
+    import hmac, hashlib, urllib.parse
+    from bot.config import BOT_TOKEN
+
     try:
         if not init_data:
-            print("⚠️ init_data bos.")
+            print("⚠️ init_data bo‘sh.")
             return None
 
         print("📦 Kelgen init_data:", init_data)
 
-        parsed = dict(urllib.parse.parse_qsl(init_data, strict_parsing=True))
-        print("🧩 Parsed init_data:", parsed)
+        # Telegram documentation: https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
 
-        hash_check = parsed.pop('hash', None)
-        parsed.pop('signature', None)
-        if not hash_check:
-            print("⚠️ hash joq.")
+        parsed_data = urllib.parse.parse_qsl(init_data, strict_parsing=True)
+        data_dict = dict(parsed_data)
+
+        hash_from_telegram = data_dict.pop("hash", None)
+        if not hash_from_telegram:
+            print("❌ Hash topilmadi.")
             return None
 
-        print("🔐 hash (Telegramnan):", hash_check)
+        # 1. Keylarni tartiblash va '\n' bilan birlashtirish
+        sorted_data = sorted((k, v) for k, v in data_dict.items())
+        data_check_string = '\n'.join([f"{k}={v}" for k, v in sorted_data])
 
-        # Hash hisoblash uchun string yasaymiz
-        data_check_arr = [f"{k}={v}" for k, v in sorted(parsed.items())]
-        data_check_string = '\n'.join(data_check_arr)
-        print("📄 HMAC ushin data_check_string:", repr(data_check_string))
+        print("📄 HMAC uchun data_check_string:", repr(data_check_string))
 
-        # HMAC hisoblash
-        secret_key = hashlib.sha256(BOT_TOKEN.encode()).digest()
-        hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-        print("🔑 HMAC esaplangan hash:", hmac_hash)
+        # 2. Secret key: sha256(BOT_TOKEN)
+        secret = hashlib.sha256(BOT_TOKEN.encode()).digest()
 
-        if hmac_hash != hash_check:
-            print("❌ HMAC hash mas emes!")
+        # 3. HMAC
+        computed_hash = hmac.new(secret, data_check_string.encode(), hashlib.sha256).hexdigest()
+        print("🔑 HMAC hisoblangan:", computed_hash)
+        print("🔐 Telegramdan hash:", hash_from_telegram)
+
+        if computed_hash != hash_from_telegram:
+            print("❌ Hashlar mos emas!")
             return None
 
-        print("✅ HMAC hash duris!")
-        return parsed
+        print("✅ Hash tekshiruvdan o‘tdi.")
+        return data_dict
 
     except Exception as e:
-        print("❌ verify_init_data ERROR:", e)
+        print("❌ Exception:", e)
         return None
+
