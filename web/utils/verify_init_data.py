@@ -15,6 +15,7 @@ def verify_init_data(init_data: str) -> dict | None:
         print("🧩 Parsed init_data:", parsed)
 
         hash_check = parsed.pop('hash', None)
+        parsed.pop('signature', None)
         if not hash_check:
             print("⚠️ hash joq.")
             return None
