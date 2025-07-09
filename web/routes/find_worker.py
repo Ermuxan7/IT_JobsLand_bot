@@ -14,7 +14,11 @@ async def find_worker(
         if not user_data:
             return {"res": "error", "reason": "invalid init_data"}
         
-        user_id = int(user_data.get("user_id", 0))
+        user_id_str = user_data.get("user_id")
+        if not user_id_str:
+            return {"res": "error", "reason": "missing user.id"}
+        
+        user_id = int(user_id_str)
 
         message = (
             f"   📢 *Vakansiya!*\n"
