@@ -11,14 +11,9 @@ async def find_worker(
 ):
     try:
         user_data = verify_init_data(payload.init_data)
-        if not user_data:
-            return {"res": "error", "reason": "invalid init_data"}
         
-        user_id_str = user_data.get("user_id")
-        if not user_id_str:
-            return {"res": "error", "reason": "missing user.id"}
-        
-        user_id = int(user_id_str)
+        user_id = user_data["user"]["id"]
+        print(f"Paydalaniwshi id: {user_id}")
 
         message = (
             f"   📢 *Vakansiya!*\n"

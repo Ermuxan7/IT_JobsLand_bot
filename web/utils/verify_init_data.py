@@ -1,44 +1,38 @@
-import hmac
-import hashlib
-import urllib.parse
+import hmac, hashlib, urllib.parse, json
 from bot.config import BOT_TOKEN
 
 def verify_init_data(init_data: str) -> dict | None:
     try:
-        if not init_data:
-            print("⚠️ init_data bos.")
-            return None
+        # 1. init_data stringini dictionary (dict) ga aylantirish
+        parsed_data = dict(urllib.parse.parse_qsl(init_data))
 
-        print("📦 Kelgen init_data:", init_data)
+        # 2. hashdi ajiratip aliw
+        received_hash = parsed_data.pop("hash", None)
 
-        parsed = urllib.parse.parse_qsl(init_data, strict_parsing=True)
-        data_dict = dict(parsed)
+        # 3. qalg'an mag'liwmatlardi ta'rtiplep string qiliw
+        data_check_str = "\n".join([f"{k}={v}" for k, v in sorted(parsed_data.items())])
 
-        hash_from_telegram = data_dict.pop("hash", None)
-        if not hash_from_telegram:
-            print("❌ hash tabilmadi.")
-            return None
+        # 4. secret key jasaw
+        secret_key = hmac.new(
+            key=b"WebAppData",
+            msg=BOT_TOKEN.encode(),
+            digestmod=hashlib.sha256
+        ).digest()
 
-        # ❗ signature ni hammasidan chiqaramiz
-        data_dict.pop("signature", None)
+        # 5. expected hash (Telegram boliwi kerek bolgan)
+        expected_hash = hmac.new(
+            key=secret_key,
+            msg = data_check_str.encode(),
+            digestmod=hashlib.sha256
+        ).hexdigest()
 
-        # 🔄 data_check_string yaratamiz
-        sorted_data = sorted(data_dict.items())
-        data_check_string = "\n".join([f"{k}={v}" for k, v in sorted_data])
-        print("📄 HMAC uchun data_check_string:", repr(data_check_string))
-
-        # 🔐 HMAC hisoblash
-        secret_key = hashlib.sha256(BOT_TOKEN.encode()).digest()
-        hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-        print("🔑 HMAC esaplangan:", hmac_hash)
-        print("🔐 Telegramdan hash:", hash_from_telegram)
-
-        if hmac_hash != hash_from_telegram:
-            print("❌ Hashlar mas emes!")
-            return None
-
-        print("✅ Hash duris!")
-        return data_dict
+        if not hmac.compare_digest(received_hash, expected_hash):
+            raise ValueError("❌ init_data verification failed")
+        
+        # 6. user mag'liwmatlarin json qilib qaytariw
+        return {
+            "user": json.loads(parsed_data["user"])
+        }
 
     except Exception as e:
         print("❌ Exception:", e)
