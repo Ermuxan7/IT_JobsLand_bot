@@ -16,15 +16,15 @@ async def find_worker(
         print(f"Paydalaniwshi id: {user_id}")
 
         message = (
-            f"   📢 *Vakansiya!*\n"
-            f"🏢 Kompaniya: {payload.company}\n"
-            f"💼 Lawazim: {payload.position}\n"
-            f"📋 Talaplar: {payload.requirements}\n"
-            f"📍 Manzil: {payload.address}\n"
-            f"⏱ Jumis waqti: {payload.working_time}\n"
-            f"💰 Ayliq: {payload.salary}\n"
-            f"📞 Baylanisiw: {payload.contacts}\n"
-            f"📝 Qosimsha: {payload.additional}"
+            f"   *#vacancy*\n\n"
+            f"👨‍💼 *Lawazim*: {payload.position}\n"
+            f"🏛 *Mekeme*: {payload.company}\n"
+            f"📍 *Mánzil*: {payload.address}\n"
+            f"📌 *Talaplar*: {payload.requirements}\n"
+            f"⏰ *Jumis waqiti*: {payload.working_time}\n"
+            f"💰 *Ayliq*: {payload.salary}\n"
+            f"☎️ *Baylanis*: {payload.contacts}\n"
+            f"📎 *Qosimsha*: {payload.additional}"
         )
 
         form_data = {

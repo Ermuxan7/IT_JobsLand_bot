@@ -16,17 +16,17 @@ async def send_resume(
         print(f"Paydalaniwshi id: {user_id}")
         
         message = (
-            f"📄 *Rezyume!*\n"
-            f"👤 Ati: {payload.full_name}\n"
-            f"🎂 Jasi: {payload.age}\n"
-            f"💼 Lawazim: {payload.profession}\n"
-            f"📍 Manzil: {payload.address}\n"
-            f"📋 Skills: {payload.skills}\n"
-            f"📈 Tajiriybe: {payload.experience}\n"
-            f"💰 Ayliq: {payload.salary}\n"
-            f"🎯 Maqset: {payload.goal}\n"
-            f"📞 Baylanisiw: {payload.contacts}\n"
-            f"🌐 Portfolio: {payload.portfolio or 'Korsetilmegen'}"
+             f"   *#resume*\n\n"
+            f"*Kásibim*: {payload.profession}\n"
+            f"*FAA*: {payload.full_name}\n"
+            f"*Jasim*: {payload.age}\n"
+            f"*Aymaq*: {payload.address}\n"
+            f"*Uqiplarim*: {payload.skills}\n"
+            f"*Tájiriybe*: {payload.experience}\n"
+            f"*Portfolio*: {payload.portfolio or 'Korsetilmegen'}"
+            f"*Ayliq kútim*: {payload.salary}\n"
+            f"*Maqset*: {payload.goal}\n"
+            f"*Baylanis*: {payload.contacts}\n"
         )
 
         form_data = {

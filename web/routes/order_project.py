@@ -16,12 +16,12 @@ async def order_project(
         print(f"Paydalaniwshi id: {user_id}")
         
         message = (
-            f"🛠 *Proyekt buyirtpa!*\n"
-            f"👤 Buyirtpashi: {payload.specialist}\n"
-            f"📌 Proyekt-turi: {payload.task}\n"
-            f"📝 Proekt haqqinda: {payload.additional}\n"
-            f"💰 Budjet: {payload.budget}\n"
-            f"📞 Baylanisiw: {payload.contacts}"
+            f"   * #project #заказ #буйыртпа *\n\n"
+            f"👩‍💼 *Qa'niyge*: {payload.specialist}\n"
+            f"📌 *Tapsirma*: {payload.task}\n"
+            f"💵 *Qa'rejet*(byudjet): {payload.budget}\n"
+            f"☎️ *Baylanis*: {payload.contacts}"
+            f"📎 *Qosimsha*: {payload.additional}\n"
         )
 
         form_data = {

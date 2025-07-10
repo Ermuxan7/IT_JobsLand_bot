@@ -73,7 +73,8 @@ async def send_to_admin(message: str, form_data: dict, form_type: str):
         "chat_id": ADMIN_ID,
         "text": f"📥 Jan'a {form_type} keldi.\n\n{message}",
         "parse_mode": "Markdown",
-        "reply_markup": inline_keyboard
+        "reply_markup": inline_keyboard,
+        "disable_web_page_preview": True
     }
 
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
@@ -86,7 +87,8 @@ async def send_telegram_message(message: str):
     payload = {
         "chat_id": CHANNEL_ID,
         "text": message,
-        "parse_mode": "Markdown"
+        "parse_mode": "Markdown",
+        "disable_web_page_preview": True
     }
 
     res = requests.post(url, data=payload, timeout=10)

@@ -40,38 +40,38 @@ async def handle_callback(callback_query: types.CallbackQuery):
             # Kanalga jiberiletugin magliwmat turleri
             if form_type == 'vacancy':
                 message = (
-                    f"   📢 *Vakansiya!*\n"
-                    f"🏢 Kompaniya: {item['company']}\n"
-                    f"💼 Lawazim: {item['position']}\n"
-                    f"📍 Manzil: {item['address']}\n"
-                    f"⏱ Jumis waqti: {item['working_time']}\n"
-                    f"📋 Talaplar: {item['requirements']}\n"
-                    f"💰 Ayliq: {item['salary']}\n"
-                    f"📞 Baylanisiw: {item['contacts']}\n"
-                    f"📝 Qosimsha: {item['additional']}\n"
+                    f"   *#vacancy*\n\n"
+                    f"👨‍💼 *Lawazim*: {item['position']}\n"
+                    f"🏛 *Mekeme*: {item['company']}\n"
+                    f"📍 *Mánzil*: {item['address']}\n"
+                    f"📌 *Talaplar*: {item['requirements']}\n"
+                    f"⏰ *Jumis waqiti*: {item['working_time']}\n"
+                    f"💰 *Ayliq*: {item['salary']}\n"
+                    f"☎️ *Baylanis*: {item['contacts']}\n"
+                    f"📎 *Qosimsha*: {item['additional']}\n"
                 )
             elif form_type == 'resume':
                 message = (
-                    f"   📄 *Rezyume!*\n"
-                    f"👤 Ati: {item['full_name']}\n"
-                    f"💼 Lawazim: {item['profession']}\n"
-                    f"⏱ Jasi: {item['age']}\n"
-                    f"📍 Manzil: {item['address']}\n"
-                    f"📋 Talaplar: {item['skills']}\n"
-                    f"📈 Tajiriybe: {item['experience']}\n"
-                    f"💰 Ayliq: {item['salary']}\n"
-                    f"🎯 Maqseti: {item['goal']}\n"
-                    f"🌐 Portfolio: {item['portfolio']}\n"
-                    f"📞 Baylanisiw: {item['contacts']}\n"
+                    f"   *#resume*\n\n"
+                    f"*Kásibim*: {item['profession']}\n"
+                    f"*FAA*: {item['full_name']}\n"
+                    f"*Jasim*: {item['age']}\n"
+                    f"*Aymaq*: {item['address']}\n"
+                    f"*Uqiplarim*: {item['skills']}\n"
+                    f"*Tájiriybe*: {item['experience']}\n"
+                    f"*Portfolio*: {item['portfolio']}\n"
+                    f"*Ayliq kútim*: {item['salary']}\n"
+                    f"*Maqset*: {item['goal']}\n"
+                    f"*Baylanis*: {item['contacts']}\n"
                 )
             elif form_type == 'project':
                 message = (
-                    f"   📊 *Proyekt!*\n"
-                    f"👤 Specialist: {item['specialist']}\n"
-                    f"📋 Task: {item['task']}\n"
-                    f"💰 Byudjet: {item['budget']}\n"
-                    f"📞 Baylanisiw: {item['contacts']}\n"
-                    f"📝 Qosimsha: {item['additional']}\n"
+                    f"   * #project #заказ #буйыртпа *\n\n"
+                    f"👩‍💼 *Qa'niyge*: {item['specialist']}\n"
+                    f"📌 *Tapsirma*: {item['task']}\n"
+                    f"💵 *Qa'rejet*(byudjet): {item['budget']}\n"
+                    f"☎️ *Baylanis*: {item['contacts']}\n"
+                    f"📎 *Qosimsha*: {item['additional']}\n"
                 )
         
             # telegram kanalga jiberiw
